@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ type Profile = {
   last_name: string | null;
 };
 
-type Role = 'admin' | 'member';
+type Role = 'admin';
 
 interface AuthContextType {
   session: Session | null;
@@ -42,8 +43,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .single();
         setProfile(profileData as any);
 
-        // Roles will be implemented later.
-        setRoles([]);
+        // Fetch roles
+        const { data: rolesData, error: rolesError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id);
+        
+        if (rolesData) {
+          const userRoles = rolesData.map((r: { role: Role }) => r.role);
+          setRoles(userRoles);
+        } else {
+          setRoles([]);
+        }
+        if (rolesError) {
+          console.error("Error fetching user roles:", rolesError);
+          setRoles([]);
+        }
       } else {
         setProfile(null);
         setRoles([]);

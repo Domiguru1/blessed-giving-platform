@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 const Index = () => {
-  const { user, profile, signOut, loading } = useAuth();
+  const { user, profile, signOut, loading, roles } = useAuth();
 
   if (loading) {
     return (
@@ -19,6 +19,8 @@ const Index = () => {
       ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim()
       : user?.email;
 
+  const isAdmin = roles.includes('admin');
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <div className="text-center">
@@ -27,6 +29,11 @@ const Index = () => {
           <div className="space-y-4">
             <p className="text-xl text-muted-foreground">You are logged in as {displayName}</p>
             <div className="flex flex-wrap justify-center gap-4">
+              {isAdmin && (
+                <Button asChild variant="secondary">
+                  <Link to="/admin">Admin Dashboard</Link>
+                </Button>
+              )}
               <Button asChild>
                 <Link to="/contribute">Make a Contribution</Link>
               </Button>
