@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (session?.user) {
         // Fetch profile
-        const { data: profileData } = await supabase
+        const { data: profileData } = await (supabase as any)
           .from('profiles')
           .select('first_name, last_name')
           .eq('id', session.user.id)
@@ -44,11 +44,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setProfile(profileData as any);
 
         // Fetch roles
-        const { data: rolesData } = await supabase
+        const { data: rolesData } = await (supabase as any)
           .from('user_roles')
           .select('role')
           .eq('user_id', session.user.id);
-        setRoles((rolesData as any[])?.map(r => r.role) || []);
+        setRoles((rolesData as any[])?.map((r: any) => r.role) || []);
       } else {
         setProfile(null);
         setRoles([]);
