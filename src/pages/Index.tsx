@@ -1,11 +1,36 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const Index = () => {
+  const { user, signOut, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+        <h1 className="text-4xl font-bold mb-4">Welcome to the Church Management Platform</h1>
+        {user ? (
+          <div className="space-y-4">
+            <p className="text-xl text-muted-foreground">You are logged in as {user.email}</p>
+            <Button onClick={signOut}>Sign Out</Button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-xl text-muted-foreground">Giving made simple. Please sign in to continue.</p>
+            <Button asChild>
+              <Link to="/auth">Login / Sign Up</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
