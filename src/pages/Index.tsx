@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 const Index = () => {
-  const { user, signOut, loading } = useAuth();
+  const { user, profile, signOut, loading } = useAuth();
 
   if (loading) {
     return (
@@ -14,19 +14,27 @@ const Index = () => {
     );
   }
 
+  const displayName =
+    (profile?.first_name || profile?.last_name)
+      ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim()
+      : user?.email;
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">Welcome to the Church Management Platform</h1>
         {user ? (
           <div className="space-y-4">
-            <p className="text-xl text-muted-foreground">You are logged in as {user.email}</p>
+            <p className="text-xl text-muted-foreground">You are logged in as {displayName}</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild>
                 <Link to="/contribute">Make a Contribution</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link to="/history">View History</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/profile">Profile</Link>
               </Button>
               <Button onClick={signOut}>Sign Out</Button>
             </div>

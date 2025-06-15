@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -43,12 +42,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .single();
         setProfile(profileData as any);
 
-        // Fetch roles
-        const { data: rolesData } = await (supabase as any)
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id);
-        setRoles((rolesData as any[])?.map((r: any) => r.role) || []);
+        // Roles will be implemented later.
+        setRoles([]);
       } else {
         setProfile(null);
         setRoles([]);

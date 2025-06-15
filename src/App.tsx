@@ -9,6 +9,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import AuthPage from "./pages/Auth";
 import ContributePage from "./pages/Contribute";
 import ContributionHistory from "./pages/ContributionHistory";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/contribute" element={<ContributePage />} />
             <Route path="/history" element={<ContributionHistory />} />
+            <Route path="/profile" element={<ProfilePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
