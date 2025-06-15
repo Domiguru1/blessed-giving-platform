@@ -47,7 +47,7 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center">Heart of Christ</h1>
+        <h1 className="text-3xl font-bold text-center">Church Management</h1>
         <p className="text-center text-muted-foreground">Sign in or create an account</p>
         <form className="space-y-4">
           <div>

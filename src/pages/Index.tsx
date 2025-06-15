@@ -24,7 +24,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Heart of Christ</h1>
+        <h1 className="text-4xl font-bold mb-4">Welcome to the Church Management Platform</h1>
         {user ? (
           <div className="space-y-4">
             <p className="text-xl text-muted-foreground">You are logged in as {displayName}</p>
