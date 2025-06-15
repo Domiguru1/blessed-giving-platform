@@ -21,7 +21,12 @@ const Index = () => {
         {user ? (
           <div className="space-y-4">
             <p className="text-xl text-muted-foreground">You are logged in as {user.email}</p>
-            <Button onClick={signOut}>Sign Out</Button>
+            <div className="flex justify-center gap-4">
+              <Button asChild>
+                <Link to="/contribute">Make a Contribution</Link>
+              </Button>
+              <Button onClick={signOut}>Sign Out</Button>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
