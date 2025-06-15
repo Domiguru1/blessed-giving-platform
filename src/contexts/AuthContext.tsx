@@ -41,14 +41,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .select('first_name, last_name')
           .eq('id', session.user.id)
           .single();
-        setProfile(profileData);
+        setProfile(profileData as any);
 
         // Fetch roles
         const { data: rolesData } = await supabase
           .from('user_roles')
           .select('role')
           .eq('user_id', session.user.id);
-        setRoles(rolesData?.map(r => r.role) || []);
+        setRoles((rolesData as any[])?.map(r => r.role) || []);
       } else {
         setProfile(null);
         setRoles([]);
