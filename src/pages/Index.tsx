@@ -22,13 +22,13 @@ const Index = () => {
   const isAdmin = roles.includes('admin');
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Heart Of Christ</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 sm:p-6 md:p-8">
+      <div className="text-center max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">Welcome to Heart Of Christ</h1>
         {user ? (
-          <div className="space-y-4">
-            <p className="text-xl text-muted-foreground">You are logged in as {displayName}</p>
-            <div className="flex flex-wrap justify-center gap-4">
+          <div className="space-y-4 sm:space-y-6">
+            <p className="text-lg sm:text-xl text-muted-foreground px-4">You are logged in as {displayName}</p>
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4">
               {isAdmin && (
                 <Button asChild variant="secondary">
                   <Link to="/admin">Admin Dashboard</Link>
@@ -47,9 +47,9 @@ const Index = () => {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <p className="text-xl text-muted-foreground">Giving made simple. Please sign in to continue.</p>
-            <Button asChild>
+          <div className="space-y-4 sm:space-y-6 px-4">
+            <p className="text-lg sm:text-xl text-muted-foreground">Giving made simple. Please sign in to continue.</p>
+            <Button asChild className="w-full sm:w-auto">
               <Link to="/auth">Login / Sign Up</Link>
             </Button>
           </div>

@@ -66,9 +66,9 @@ const AuthPage = () => {
 
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-full max-w-md p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold text-center">Reset Password</h1>
+      <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
+        <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center">Reset Password</h1>
           <p className="text-center text-muted-foreground">Enter your email to receive a password reset link</p>
           <form onSubmit={handleForgotPassword} className="space-y-4">
             <div>
@@ -102,8 +102,8 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="w-full max-w-md p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
+      <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center">Heart Of Christ</h1>
         <p className="text-center text-muted-foreground">Sign in or create an account</p>
         <form className="space-y-4">

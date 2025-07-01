@@ -64,8 +64,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
+      <Card className="w-full max-w-md mx-4">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Your Profile</CardTitle>
           <CardDescription className="text-center">Update your personal information.</CardDescription>
