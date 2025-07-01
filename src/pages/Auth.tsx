@@ -11,6 +11,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -43,6 +44,62 @@ const AuthPage = () => {
     }
     setLoading(false);
   };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast({ title: "Please enter your email address", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth`,
+    });
+    if (error) {
+      toast({ title: "Error sending reset email", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Password reset email sent!", description: "Check your email for the reset link." });
+      setShowForgotPassword(false);
+    }
+    setLoading(false);
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-full max-w-md p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
+          <h1 className="text-3xl font-bold text-center">Reset Password</h1>
+          <p className="text-center text-muted-foreground">Enter your email to receive a password reset link</p>
+          <form onSubmit={handleForgotPassword} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? 'Sending Reset Email...' : 'Send Reset Email'}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setShowForgotPassword(false)} 
+                className="w-full"
+              >
+                Back to Sign In
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -78,6 +135,16 @@ const AuthPage = () => {
             </Button>
             <Button onClick={handleSignUp} disabled={loading} variant="outline" className="w-full">
               {loading ? 'Signing Up...' : 'Sign Up'}
+            </Button>
+          </div>
+          <div className="text-center">
+            <Button 
+              type="button" 
+              variant="link" 
+              onClick={() => setShowForgotPassword(true)}
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              Forgot your password?
             </Button>
           </div>
         </form>
