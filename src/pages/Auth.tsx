@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
@@ -35,6 +37,10 @@ const AuthPage = () => {
       password,
       options: {
         emailRedirectTo: window.location.origin,
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+        },
       },
     });
     if (error) {
@@ -107,6 +113,30 @@ const AuthPage = () => {
         <h1 className="text-3xl font-bold text-center">Heart Of Christ</h1>
         <p className="text-center text-muted-foreground">Sign in or create an account</p>
         <form className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="John"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Doe"
+                required
+              />
+            </div>
+          </div>
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
