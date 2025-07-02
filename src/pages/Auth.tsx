@@ -14,6 +14,7 @@ const AuthPage = () => {
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -111,32 +112,61 @@ const AuthPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card text-card-foreground rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center">Heart Of Christ</h1>
-        <p className="text-center text-muted-foreground">Sign in or create an account</p>
-        <form className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="John"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Doe"
-                required
-              />
-            </div>
+        <p className="text-center text-muted-foreground">
+          {isSignUp ? 'Create your account' : 'Sign in to your account'}
+        </p>
+        
+        <div className="flex justify-center mb-6">
+          <div className="flex rounded-lg bg-muted p-1">
+            <Button
+              type="button"
+              variant={!isSignUp ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setIsSignUp(false)}
+              className="rounded-md"
+            >
+              Sign In
+            </Button>
+            <Button
+              type="button"
+              variant={isSignUp ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setIsSignUp(true)}
+              className="rounded-md"
+            >
+              Sign Up
+            </Button>
           </div>
+        </div>
+
+        <form onSubmit={isSignUp ? handleSignUp : handleLogin} className="space-y-4">
+          {isSignUp && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="John"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Doe"
+                  required
+                />
+              </div>
+            </div>
+          )}
+          
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -148,6 +178,7 @@ const AuthPage = () => {
               required
             />
           </div>
+          
           <div>
             <Label htmlFor="password">Password</Label>
             <Input
@@ -159,24 +190,26 @@ const AuthPage = () => {
               required
             />
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={handleLogin} disabled={loading} className="w-full">
-              {loading ? 'Signing In...' : 'Sign In'}
-            </Button>
-            <Button onClick={handleSignUp} disabled={loading} variant="outline" className="w-full">
-              {loading ? 'Signing Up...' : 'Sign Up'}
-            </Button>
-          </div>
-          <div className="text-center">
-            <Button 
-              type="button" 
-              variant="link" 
-              onClick={() => setShowForgotPassword(true)}
-              className="text-sm text-muted-foreground hover:text-primary"
-            >
-              Forgot your password?
-            </Button>
-          </div>
+          
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading 
+              ? (isSignUp ? 'Creating Account...' : 'Signing In...') 
+              : (isSignUp ? 'Create Account' : 'Sign In')
+            }
+          </Button>
+          
+          {!isSignUp && (
+            <div className="text-center">
+              <Button 
+                type="button" 
+                variant="link" 
+                onClick={() => setShowForgotPassword(true)}
+                className="text-sm text-muted-foreground hover:text-primary"
+              >
+                Forgot your password?
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </div>
