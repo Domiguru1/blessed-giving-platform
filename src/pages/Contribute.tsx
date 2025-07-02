@@ -8,12 +8,31 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useQuery } from '@tanstack/react-query';
 
 const ContributePage = () => {
   const { user, loading: authLoading } = useAuth();
   const [amount, setAmount] = useState('');
+  const [contributionType, setContributionType] = useState('offering');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Fetch total contributions for the user
+  const { data: totalContributions, refetch: refetchTotal } = useQuery({
+    queryKey: ['totalContributions', user?.id],
+    queryFn: async () => {
+      if (!user) return 0;
+      const { data, error } = await supabase
+        .from('contributions')
+        .select('amount')
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      return data.reduce((sum, contribution) => sum + contribution.amount, 0);
+    },
+    enabled: !!user,
+  });
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -43,6 +62,7 @@ const ContributePage = () => {
     const { error } = await supabase.from('contributions').insert({
       user_id: user.id,
       amount: numericAmount,
+      contribution_type: contributionType,
     });
 
     if (error) {
@@ -50,6 +70,7 @@ const ContributePage = () => {
     } else {
       toast({ title: 'Success!', description: 'Thank you for your contribution.' });
       setAmount('');
+      refetchTotal(); // Refresh the total
     }
     setLoading(false);
   };
@@ -68,19 +89,38 @@ const ContributePage = () => {
         <CardHeader>
           <CardTitle className="text-2xl text-center">Make a Contribution</CardTitle>
           <CardDescription className="text-center">Your support is greatly appreciated.</CardDescription>
+          {totalContributions !== undefined && (
+            <div className="text-center mt-2 p-2 bg-muted rounded">
+              <p className="text-sm text-muted-foreground">Total Contributions</p>
+              <p className="text-lg font-semibold text-primary">KES {totalContributions.toLocaleString()}</p>
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleContribute} className="space-y-4">
             <div>
-              <Label htmlFor="amount">Amount ($)</Label>
+              <Label htmlFor="contributionType">Contribution Type</Label>
+              <Select value={contributionType} onValueChange={setContributionType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select contribution type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="tithe">Tithe</SelectItem>
+                  <SelectItem value="offering">Offering</SelectItem>
+                  <SelectItem value="sacrifice">Sacrifice</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="amount">Amount (KES)</Label>
               <Input
                 id="amount"
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="e.g. 50.00"
-                min="0.01"
-                step="0.01"
+                placeholder="e.g. 5000"
+                min="1"
+                step="1"
                 required
                 disabled={loading}
               />

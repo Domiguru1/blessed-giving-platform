@@ -21,12 +21,13 @@ type Contribution = {
   id: string;
   created_at: string;
   amount: number;
+  contribution_type: string;
 };
 
 const fetchContributions = async (userId: string): Promise<Contribution[]> => {
   const { data, error } = await supabase
     .from('contributions')
-    .select('id, created_at, amount')
+    .select('id, created_at, amount, contribution_type')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -92,14 +93,16 @@ const ContributionHistory = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead className="text-right">Amount (KES)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {contributions.map((contribution) => (
                     <TableRow key={contribution.id}>
                       <TableCell>{new Date(contribution.created_at).toLocaleDateString()}</TableCell>
-                      <TableCell className="text-right">${contribution.amount.toFixed(2)}</TableCell>
+                      <TableCell className="capitalize">{contribution.contribution_type}</TableCell>
+                      <TableCell className="text-right">KES {contribution.amount.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -69,6 +69,7 @@ export type Database = {
       contributions: {
         Row: {
           amount: number
+          contribution_type: string
           created_at: string
           id: string
           updated_at: string | null
@@ -76,6 +77,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          contribution_type?: string
           created_at?: string
           id?: string
           updated_at?: string | null
@@ -83,6 +85,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          contribution_type?: string
           created_at?: string
           id?: string
           updated_at?: string | null
