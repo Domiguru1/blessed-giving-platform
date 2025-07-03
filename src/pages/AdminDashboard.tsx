@@ -8,10 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
-import { CalendarIcon, FilterIcon, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
+import { useState } from 'react';
+import { CalendarIcon, FilterIcon } from 'lucide-react';
 
 type ContributionWithProfile = {
   id: string;
@@ -67,8 +65,7 @@ const fetchAllContributions = async (): Promise<ContributionWithProfile[]> => {
 };
 
 const AdminDashboard = () => {
-  const { profile, user, roles, loading } = useAuth();
-  const navigate = useNavigate();
+  const { profile, user } = useAuth();
   const [dateFilter, setDateFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [memberFilter, setMemberFilter] = useState('');
@@ -78,77 +75,10 @@ const AdminDashboard = () => {
       ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim()
       : user?.email;
 
-  const isAdmin = roles.includes('admin');
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({ title: "Signed out successfully" });
-      navigate('/');
-    } catch (error) {
-      toast({ title: "Error signing out", variant: "destructive" });
-    }
-  };
-
   const { data: contributions, isLoading, isError, error } = useQuery({
     queryKey: ['admin-contributions'],
     queryFn: fetchAllContributions,
-    enabled: !!user && isAdmin, // Only fetch if user is authenticated and is admin
   });
-
-  // Show loading while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  // Show sign-in option if not authenticated
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Admin Dashboard</CardTitle>
-            <CardDescription>Sign in to access the admin dashboard</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button asChild className="w-full">
-              <Link to="/auth">Sign In</Link>
-            </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link to="/">Back to Home</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  // Show access denied if authenticated but not admin
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Access Denied</CardTitle>
-            <CardDescription>You don't have admin privileges to access this dashboard</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button onClick={handleSignOut} variant="outline" className="w-full">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link to="/">Back to Home</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   const filteredContributions = contributions?.filter(contribution => {
     const matchesDate = !dateFilter || 
@@ -175,16 +105,8 @@ const AdminDashboard = () => {
 
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-start">
-              <div>
-                <CardTitle className="text-2xl">Admin Dashboard</CardTitle>
-                <CardDescription>Welcome, {displayName}. Manage members and contributions.</CardDescription>
-              </div>
-              <Button onClick={handleSignOut} variant="outline" size="sm">
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
-              </Button>
-            </div>
+            <CardTitle className="text-2xl">Admin Dashboard</CardTitle>
+            <CardDescription>Welcome, {displayName}. Manage members and contributions.</CardDescription>
           </CardHeader>
           <CardContent>
             {/* Filters */}
