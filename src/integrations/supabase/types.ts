@@ -134,6 +134,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_admin_role: {
+        Args: { _email: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _user_id: string
